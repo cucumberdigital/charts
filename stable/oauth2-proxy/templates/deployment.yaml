@@ -73,9 +73,15 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
 {{- if .Values.config.configFile }}
         volumeMounts:
+        - mountPath: /etc/ssl/certs
+          name: ssl-certs-host
+          readOnly: true
         - mountPath: /etc/oauth2_proxy
           name: {{ template "oauth2-proxy.fullname" . }}-configmap
       volumes:
+      - hostPath:
+          path: /etc/ssl/certs
+        name: ssl-certs-host
       - configMap:
           defaultMode: 420
           name: {{ template "oauth2-proxy.fullname" . }}

@@ -31,13 +31,13 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
-          - --auto-generate-certificates
+          # - --auto-generate-certificates
 {{- if .Values.extraArgs }}
 {{ toYaml .Values.extraArgs | indent 10 }}
 {{- end }}
         ports:
-        - name: https
-          containerPort: 8443
+        - name: http
+          containerPort: 9090
           protocol: TCP
         volumeMounts:
         - name: kubernetes-dashboard-certs
@@ -47,9 +47,9 @@ spec:
           name: tmp-volume
         livenessProbe:
           httpGet:
-            scheme: HTTPS
+            scheme: HTTP
             path: /
-            port: 8443
+            port: 9090
           initialDelaySeconds: 30
           timeoutSeconds: 30
         resources:
